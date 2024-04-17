@@ -3,6 +3,7 @@ import "./app.css";
 import AddContent from "./components/addContent";
 import createTrigger from "react-use-trigger";
 import useTrigger from "react-use-trigger/useTrigger";
+import ContentModal from "./components/selectedContentModal";
 
 const contentRefetch = createTrigger();
 
@@ -11,7 +12,7 @@ function App() {
 
     const [content, setContent] = useState([]);
     const [selectedContent, setSelectedContent] = useState(null);
-
+    const [isEdit, setIsEdit] = useState(false); 
 
     useEffect(() => {
         fetch(`${BASE_API_URL}/contents`)
@@ -35,6 +36,7 @@ function App() {
         setSelectedContent(null);
     };
 
+    
     return (
         <>
             <h1>Testy</h1>
@@ -45,13 +47,7 @@ function App() {
                     </div>
                 ))}
                 {selectedContent && (
-                    <div className="modal">
-                        <div className="modal-content">
-                            <span className="close" onClick={handleCloseModal}>&times;</span>
-                            <h2>{selectedContent.title}</h2>
-                            <p>{selectedContent.content}</p>
-                        </div>
-                    </div>
+                    <ContentModal refreshTrigger={contentRefetch} selectedContent={selectedContent} handleCloseModal={handleCloseModal} isEdit={isEdit} />
                 )}
             </div>
             <AddContent onAdd={contentRefetch}/>
